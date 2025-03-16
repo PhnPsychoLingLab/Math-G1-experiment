@@ -15,11 +15,18 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/preloadjs@1.0.1/lib/preloadjs.min.js"></script>
     
-    <!-- 使用非模組版本的 PsychoPy JavaScript -->
+    <!-- 確保 PsychoJS 庫完全載入 -->
     <script src="./lib/psychojs-2024.2.4.iife.js"></script>
-    <script src="./g1-legacy-browsers.js"></script>
     
-    <!-- 注釋掉或移除模組版本 -->
-    <!-- <script src="./g1.js" type="module"></script> -->
+    <!-- 添加一個小延遲確保 PsychoJS 已完全初始化 -->
+    <script>
+      // 確保 PsychoJS 已全局可用
+      window.onload = function() {
+        // 然後加載實驗腳本
+        var script = document.createElement('script');
+        script.src = './g1-legacy-browsers.js';
+        document.body.appendChild(script);
+      };
+    </script>
   </body>
 </html>
