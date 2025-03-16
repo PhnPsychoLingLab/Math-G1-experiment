@@ -12,7 +12,7 @@ let expInfo = {
 
 // Start code blocks for 'Before Experiment'
 // init psychoJS:
-const psychoJS = new PsychoJS({
+const psychoJS = new window.core.PsychoJS({
   debug: true
 });
 
