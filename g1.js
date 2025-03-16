@@ -194,7 +194,7 @@ async function experimentInit() {
   hello_next_page = new visual.ButtonStim({
     win: psychoJS.window,
     name: 'hello_next_page',
-    text: null,
+    text: '""',
     fillColor: [0.0, 0.0, 0.0],
     borderColor: [0.0, 0.0, 0.0],
     color: [0.0, 0.0, 0.0],
@@ -226,7 +226,7 @@ async function experimentInit() {
   exp1_intro_next_page = new visual.ButtonStim({
     win: psychoJS.window,
     name: 'exp1_intro_next_page',
-    text: null,
+    text: '""',
     fillColor: [0.0, 0.0, 0.0],
     borderColor: [0.0, 0.0, 0.0],
     color: [0.0, 0.0, 0.0],
