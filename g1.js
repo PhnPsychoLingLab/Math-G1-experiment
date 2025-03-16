@@ -69,6 +69,9 @@ psychoJS.start({
 
 psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.INFO);
 
+
+var currentLoop;
+var frameDur;
 async function updateInfo() {
   currentLoop = psychoJS.experiment;  // right now there are no loops
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
@@ -96,6 +99,15 @@ async function updateInfo() {
   return Scheduler.Event.NEXT;
 }
 
+
+var helloClock;
+var hello_bg;
+var hello_next_page;
+var exp_introClock;
+var exp1_intro_bg;
+var exp1_intro_next_page;
+var globalClock;
+var routineTimer;
 async function experimentInit() {
   // Initialize components for Routine "hello"
   helloClock = new util.Clock();
@@ -168,6 +180,14 @@ async function experimentInit() {
   return Scheduler.Event.NEXT;
 }
 
+
+var t;
+var frameN;
+var continueRoutine;
+var helloMaxDurationReached;
+var mic_perms_text_string;
+var helloMaxDuration;
+var helloComponents;
 function helloRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
@@ -194,6 +214,7 @@ function helloRoutineBegin(snapshot) {
             audio: true,
             video: true,  // 改為 true 以請求攝影機權限
           }
+        )
     
         // Success callback
         .then((stream) => {
@@ -230,6 +251,7 @@ function helloRoutineBegin(snapshot) {
     return Scheduler.Event.NEXT;
   }
 }
+
 
 function helloRoutineEachFrame() {
   return async function () {
@@ -313,6 +335,7 @@ function helloRoutineEachFrame() {
   };
 }
 
+
 function helloRoutineEnd(snapshot) {
   return async function () {
     //--- Ending Routine 'hello' ---
@@ -336,6 +359,10 @@ function helloRoutineEnd(snapshot) {
   }
 }
 
+
+var exp_introMaxDurationReached;
+var exp_introMaxDuration;
+var exp_introComponents;
 function exp_introRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
@@ -363,6 +390,7 @@ function exp_introRoutineBegin(snapshot) {
     return Scheduler.Event.NEXT;
   }
 }
+
 
 function exp_introRoutineEachFrame() {
   return async function () {
@@ -446,6 +474,7 @@ function exp_introRoutineEachFrame() {
   };
 }
 
+
 function exp_introRoutineEnd(snapshot) {
   return async function () {
     //--- Ending Routine 'exp_intro' ---
@@ -469,12 +498,14 @@ function exp_introRoutineEnd(snapshot) {
   }
 }
 
+
 function importConditions(currentLoop) {
   return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };
 }
+
 
 async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
