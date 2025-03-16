@@ -19,9 +19,6 @@ let expInfo = {
 };
 
 // Start code blocks for 'Before Experiment'
-// 定義全域變數
-var mic = null;
-const dataPipeExperimentID = "mhfpupw5UYEf";  // 你的 DataPipe 實驗 ID
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -72,9 +69,6 @@ psychoJS.start({
 
 psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.INFO);
 
-
-var currentLoop;
-var frameDur;
 async function updateInfo() {
   currentLoop = psychoJS.experiment;  // right now there are no loops
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
@@ -102,37 +96,9 @@ async function updateInfo() {
   return Scheduler.Event.NEXT;
 }
 
-
-var helloClock;
-var hello_bg;
-var hello_next_page;
-var exp_introClock;
-var exp1_intro_bg;
-var exp1_intro_next_page;
-var globalClock;
-var routineTimer;
 async function experimentInit() {
   // Initialize components for Routine "hello"
   helloClock = new util.Clock();
-  // 初始化麥克風 (只在實驗開始時執行一次)
-  async function initMic() {
-    try {
-      mic = new sound.Microphone({
-        win: psychoJS.window,
-        name: 'mic',
-        sampleRateHz: 44100,
-        format: "audio/wav",
-        channels: 'mono',
-        maxRecordingSize: 24000.0,
-        loopback: true,
-        policyWhenFull: 'ignore',
-      });
-      console.log("麥克風初始化成功");
-    } catch (error) {
-      console.error("麥克風初始化失敗:", error);
-    }
-  }
-  initMic();
   hello_bg = new visual.ImageStim({
     win : psychoJS.window,
     name : 'hello_bg', units : undefined, 
@@ -202,13 +168,6 @@ async function experimentInit() {
   return Scheduler.Event.NEXT;
 }
 
-
-var t;
-var frameN;
-var continueRoutine;
-var helloMaxDurationReached;
-var helloMaxDuration;
-var helloComponents;
 function helloRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
@@ -221,6 +180,41 @@ function helloRoutineBegin(snapshot) {
     routineTimer.reset();
     helloMaxDurationReached = false;
     // update component parameters for each repeat
+    mic_perms_text_string = "Please grant permission to access your microphone if asked.\n\nThen, press space to continue.";
+    
+    // If browser supports getUserMedia(), request 
+    // microphone permissions
+    
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      console.log("getUserMedia supported.");
+      navigator.mediaDevices
+        .getUserMedia(
+          // constraints - audio and video needed for this app
+          {
+            audio: true,
+            video: true,  // 改為 true 以請求攝影機權限
+          }
+    
+        // Success callback
+        .then((stream) => {
+            mic_perms_text_string = "Please grant permission to access your microphone and camera if asked.\n\nThen, press space to continue.";
+            console.log("ACTIVE?");
+            console.log(stream.active);
+                if (stream.active) {
+                    continueRoutine = false;
+                }
+            })
+    
+        // Error callback
+        .catch((err) => {
+          console.error(`The following getUserMedia error occurred: ${err}`);
+          mic_perms_text_string = "Microphone access has been denied. Please refresh the page and grant permission to access your microphone.";
+        });
+    } else {
+      console.log("getUserMedia not supported on your browser!");
+      mic_perms_text_string = "Sorry, it seems your browser isn't supported.  Please try a different browser.";
+    }
+    
     // reset hello_next_page to account for continued clicks & clear times on/off
     hello_next_page.reset()
     psychoJS.experiment.addData('hello.started', globalClock.getTime());
@@ -236,7 +230,6 @@ function helloRoutineBegin(snapshot) {
     return Scheduler.Event.NEXT;
   }
 }
-
 
 function helloRoutineEachFrame() {
   return async function () {
@@ -320,7 +313,6 @@ function helloRoutineEachFrame() {
   };
 }
 
-
 function helloRoutineEnd(snapshot) {
   return async function () {
     //--- Ending Routine 'hello' ---
@@ -344,10 +336,6 @@ function helloRoutineEnd(snapshot) {
   }
 }
 
-
-var exp_introMaxDurationReached;
-var exp_introMaxDuration;
-var exp_introComponents;
 function exp_introRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
@@ -375,7 +363,6 @@ function exp_introRoutineBegin(snapshot) {
     return Scheduler.Event.NEXT;
   }
 }
-
 
 function exp_introRoutineEachFrame() {
   return async function () {
@@ -459,7 +446,6 @@ function exp_introRoutineEachFrame() {
   };
 }
 
-
 function exp_introRoutineEnd(snapshot) {
   return async function () {
     //--- Ending Routine 'exp_intro' ---
@@ -483,14 +469,12 @@ function exp_introRoutineEnd(snapshot) {
   }
 }
 
-
 function importConditions(currentLoop) {
   return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };
 }
-
 
 async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
